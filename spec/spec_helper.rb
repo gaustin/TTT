@@ -1,1 +1,1 @@
-require '../lib/ttt'
+require 'ttt'
