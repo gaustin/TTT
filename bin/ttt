@@ -1,0 +1,19 @@
+$:.unshift('../lib')
+require 'ttt'
+
+game = Game.new
+
+current_player = NaivePlayer.new('X')
+next_player = NaivePlayer.new('O')
+while !game.complete?
+  puts game.board.to_s
+  #STDIN.getc  
+	game.turn_for(current_player)
+
+  temp_player = current_player
+	current_player = next_player
+	next_player = temp_player
+end
+
+puts game.board.to_s
+puts "#{game.winner(current_player, next_player)} won!"
