@@ -12,7 +12,7 @@ class ComputerPlayer < Player
     
     # Center
     return board.move(@mark, [1, 1]) if board.unmarked_spaces.include?([1, 1])
-    
+
     # Opponent in opposing corner? Play opposite corner.
     return if play_opposing_corner(board, opponent.mark)
     
@@ -31,6 +31,8 @@ class ComputerPlayer < Player
     
     # All corners are taken
     return if opposing_corners.empty? || opposing_corners.size >= 4
+    
+    #TODO: Are opposing corners really just diagonals? In TTT all corners are opposing, in a way.
     
     unmarked_spaces = board.unmarked_spaces
     opposing_corners.each do |cell|
@@ -89,11 +91,20 @@ class ComputerPlayer < Player
   end
   
   def block_or_create_fork(board, mark, opponent_mark=nil)
-    
+
+    diagonals = board.diagonals
+    if board[1, 1] == mark
+      # try to block a fork
+      fork_to_block = diagonals.select do |diagonal| 
+        diagonal.count { |cell| cell == opponent_mark } == 2
+      end
+      play_middle_side(board) unless fork_to_block.nil?
+    elsif [1, 1] == opponent_mark
+      # try to create fork
+      fork_to_create = diagonals.select do |diagonal|
+        diagonal.count { |cell| cell == mark } == 2
+      end
+      play_middle_side(board) unless fork_to_create.nil?
+    end
   end
 end
-
-#Block opponent's fork:
-    #Option 1: Create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork or winning. 
-             # For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win. (Playing a corner in this scenario creates a fork for "X" to win.)
-    #Option 2: If there is a configuration where the opponent can fork, block that fork.

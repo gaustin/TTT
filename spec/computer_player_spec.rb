@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ComputerPlayer do
 	before(:each) do
 		@x_player = ComputerPlayer.new('X')
-		@o_player = ComputerPlayer.new('0')
+		@o_player = ComputerPlayer.new('O')
 		@game = Game.new
 		@board = Board.new(3, 3)
 	end
@@ -50,7 +50,20 @@ describe ComputerPlayer do
   end
   
   it "should play the center when it doesn't have two in a row" do
-    @game.turn_for(@x_player, Player.new('O'))
-    @game.board.marked_spaces.should include [1, 1]
+    @x_player.play(@board, @o_player)
+    @board[1, 1].should == @x_player.mark
+  end
+  
+  it "should not mark a corner when it has the center and the opponent has two corners" do
+    @board[0, 0] = @x_player.mark
+    @board[2, 2] = @x_player.mark
+    @board[1, 1] = @o_player.mark
+    @o_player.play(@board, @x_player)
+
+    @board[2, 0].should == nil
+    @board[0, 2].should == nil
+    Board::MID_SIDES.any? do |side|
+      @board[side.first, side.last] == @o_player.mark
+    end.should be_true
   end
 end
