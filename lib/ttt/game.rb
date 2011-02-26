@@ -4,16 +4,15 @@ class Game
 		@board = Board.new(3, 3)
 	end
 
-	def turn_for(player)
-	  "turn"
-		player.play(@board)
+	def turn_for(player, opponent)
+		player.play(@board, opponent)
 	end
 
 	def complete?
 		true if @board.full? || check_columns || check_rows || check_diagonals
 	end
 
-	def winner(player_one, player_two)
+	def winner
 		return check_columns || check_rows || check_diagonals || "nobody"
 	end
 	
@@ -36,9 +35,10 @@ class Game
 	end
 	
 	def check_diagonals
-	  @board.diagonals.each do |diagonal|  
-	    first = diagonal.first
-	    return first unless diagonal.any? { |value| value != first }
+	  @board.diagonals.each do |diagonal|
+	    coordinate = diagonal.first
+	    first = @board[coordinate.first, coordinate.last] 
+	    return first unless diagonal.any? { |coord| @board[coord.first, coord.last] != first }
 	  end
 	  nil
 	end

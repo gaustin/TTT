@@ -5,7 +5,7 @@ class Player
     @mark = mark
   end
   
-	def play(board)
+	def play(board, opponent)
 		raise NotImplementedError
 	end
 end

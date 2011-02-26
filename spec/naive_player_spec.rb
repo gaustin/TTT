@@ -3,7 +3,7 @@ require 'spec_helper'
 describe NaivePlayer do
   it "should make a move" do
     board = Board.new(3, 3)
-    NaivePlayer.new('X').play(board)
+    NaivePlayer.new('X').play(board, nil)
     board.full?.should be_false
   end
 end

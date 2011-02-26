@@ -1,4 +1,25 @@
 class Board
+  CORNERS = [
+    [0, 0],
+    [0, 2],
+    [2, 0],
+    [2, 2]
+  ]
+  
+  OPPOSITE_CORNERS = {
+    [0, 0] => [2, 2],
+    [2, 2] => [0, 0],
+    [0, 2] => [2, 0],
+    [2, 0] => [0, 2]
+  }
+  
+  MID_SIDES = [
+    [1, 0],
+    [0, 1],
+    [1, 2],
+    [2, 1]
+  ]
+  
   attr_reader :data
   attr_reader :size
   def initialize(x_size, y_size)
@@ -21,19 +42,21 @@ class Board
     end
   end
   
-  def unmarked_spaces(for_mark=nil)
-    space_list(for_mark) { |cell| cell.nil? }
+  def unmarked_spaces
+    space_list { |cell| cell.nil? }
   end
   
   def marked_spaces(for_mark=nil)
-    space_list(for_mark) { |cell| !cell.nil? }
+    space_list do |cell| 
+      !cell.nil? && (!for_mark.nil? ? cell == for_mark : true)
+    end
   end
   
-  def space_list(for_mark=nil, &block)
+  def space_list(&block)
     spaces = []
     @data.each_with_index do |row, y|
       row.each_with_index do |cell, x|
-        spaces << [x, y] if block.call(cell) && cell == for_mark
+        spaces << [x, y] if block.call(cell)
       end
     end
     spaces
@@ -103,12 +126,13 @@ class Board
   
   def diagonals
     left_to_right = (0...@x_size).collect do |i|
-      @data[i][i]
+      [i, i]
     end
     
     right_to_left = (0...@y_size).collect do |y|
-      @data[y][@y_size-1-y]
+      [y, @y_size-1-y]
     end
+
     [left_to_right, right_to_left]
   end
 end

@@ -13,8 +13,18 @@ describe Board do
     @board.unmarked_spaces.size.should == SIZE * SIZE
   end
   
+  it "should report the list of unmarked spaces in a non-empty board" do
+    @board.move(@x_player.mark, [1,1])
+    @board.unmarked_spaces.size.should == (SIZE * SIZE) - 1
+  end
+  
   it "should report the list of marked spaces in an empty board" do
     @board.marked_spaces.size.should == 0
+  end
+  
+  it "should report the list of marked spaces in a non-empty board" do
+    @board.move(@x_player.mark, [1,1])
+    @board.marked_spaces.size.should == 1
   end
   
   it "should allow valid moves" do
@@ -53,5 +63,12 @@ describe Board do
   it "should report the values in a row" do
     values = @board.row(0)
     values.should == Array.new(3)
+  end
+  
+  it "should report the list of coordinates in each diagonal" do
+    diagonals = @board.diagonals
+    diagonals.size.should == 2
+    diagonals.first.should == [[0, 0], [1, 1], [2, 2]]
+    diagonals.last.should == [[0, 2], [1, 1], [2, 0]]
   end
 end

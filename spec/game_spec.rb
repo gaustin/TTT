@@ -8,7 +8,7 @@ describe Game do
   end
 
 	it "should let a player take a turn" do
-		move = @game.turn_for(@x_player)
+		move = @game.turn_for(@x_player, @y_player)
 		move.should_not be_nil
 	end
 
@@ -30,21 +30,21 @@ describe Game do
   	  @game.board.move(@x_player.mark, [0, 0])
   	  @game.board.move(@x_player.mark, [0, 1])
   	  @game.board.move(@x_player.mark, [0, 2])
-  		@game.winner(@x_player, @y_player).should == @x_player.mark
+  		@game.winner.should == @x_player.mark
   	end
   	
   	it "should report a row winner" do
   	  @game.board.move(@x_player.mark, [0, 0])
   	  @game.board.move(@x_player.mark, [1, 0])
   	  @game.board.move(@x_player.mark, [2, 0])
-  		@game.winner(@x_player, @y_player).should == @x_player.mark
+  		@game.winner.should == @x_player.mark
   	end
   	
   	it "should report a diagonal winner" do
   	  @game.board.move(@x_player.mark, [0, 0])
   	  @game.board.move(@x_player.mark, [1, 1])
   	  @game.board.move(@x_player.mark, [2, 2])
-  		@game.winner(@x_player, @y_player).should == @x_player.mark
+  		@game.winner.should == @x_player.mark
   	end
   end
 end
