@@ -1,4 +1,5 @@
-$:.unshift('../lib')
+#!/usr/bin/ruby
+$:.unshift('../lib', 'lib')
 require 'ttt'
 
 game = Game.new
