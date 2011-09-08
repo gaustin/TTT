@@ -78,9 +78,18 @@ class Board
     end
   end
   
+  def empty?
+    @data.all? do |row|
+      row.all? do |cell|
+        cell.nil?
+      end
+    end
+  end
+  
   def move(mark, position)
     if valid_move?(position)
       self[position.first, position.last] = mark
+      position
     end
   end
   

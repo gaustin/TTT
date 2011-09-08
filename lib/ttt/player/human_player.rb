@@ -15,8 +15,7 @@ class HumanPlayer < Player
   	    begin
   	      x, y = choice.chomp.split(",").collect { |c| c.to_i}
   	      if options.include?([x, y])
-  	        board.move(@mark, [x, y])
-    	      break
+  	        return [x, y]
     	    else
     	      puts "\nInvalid choice. Try again.\n"
   	      end

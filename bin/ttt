@@ -16,5 +16,5 @@ while !game.complete?
 	next_player = temp_player
 end
 
-puts game.board.to_s
+puts game.to_s
 puts "#{game.winner} won!"

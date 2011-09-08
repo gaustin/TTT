@@ -3,24 +3,30 @@ class ComputerPlayer < Player
   
   def play(board, opponent)
     # FTW
-    return if play_two_in_a_row(board, @mark)
+    choice = play_two_in_a_row(board, @mark)
+    return choice if choice 
     
     # Prevent the win
-    return if play_two_in_a_row(board, @mark, opponent.mark)
+    choice = play_two_in_a_row(board, @mark, opponent.mark)
+    return choice if choice
     
-    return if block_or_create_fork(board, @mark, opponent.mark)
+    choice = block_or_create_fork(board, @mark, opponent.mark)
+    return choice if choice
     
     # Center
     return board.move(@mark, [1, 1]) if board.unmarked_spaces.include?([1, 1])
 
     # Opponent in opposing corner? Play opposite corner.
-    return if play_opposing_corner(board, opponent.mark)
+    choice = play_opposing_corner(board, opponent.mark)
+    return choice if choice
     
     # Empty corner? Play it.
-    return if play_empty_corner(board)
+    choice = play_empty_corner(board)
+    return choice if choice
     
     # Empty middle square on a side? Play it.
-    return if play_middle_side(board)
+    choice = play_middle_side(board)
+    return choice if choice
   end
   
   def play_opposing_corner(board, opposing_mark)

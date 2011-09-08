@@ -1,11 +1,11 @@
 class Game
-  attr_reader :board
 	def initialize
 		@board = Board.new(3, 3)
 	end
 
 	def turn_for(player, opponent)
-		player.play(@board, opponent)
+	  choice = player.play(@board.dup, opponent)
+		@board.move(player.mark, choice)
 	end
 
 	def complete?
@@ -41,5 +41,13 @@ class Game
 	    return first unless diagonal.any? { |coord| @board[coord.first, coord.last] != first }
 	  end
 	  nil
+	end
+	
+	def empty_board?
+	  @board.empty?
+	end
+	
+	def to_s
+	  @board.to_s
 	end
 end
