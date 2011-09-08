@@ -25,8 +25,8 @@ class ComputerPlayer < Player
   
   def play_opposing_corner(board, opposing_mark)
     # Get the list of corners claimed by the other user
-    opposing_corners = board.marked_spaces(opposing_mark).reject do |cell|
-      !Board::CORNERS.include?(cell)
+    opposing_corners = board.marked_spaces(opposing_mark).find_all do |cell|
+      Board::CORNERS.include?(cell)
     end
     
     # All corners are taken
