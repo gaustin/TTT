@@ -144,4 +144,14 @@ class Board
 
     [left_to_right, right_to_left]
   end
+  
+  def mark_if_two_in_a_row(method_name, board, mark, target_mark)
+    self.send(method_name).each_with_index do |collection, i|
+      if collection.select { |cell| cell == target_mark }.size == 2
+        collection.each_with_index do |cell, j|
+          return board.move(mark, [j, i]) if board[j, i].nil?
+        end
+      end
+    end
+  end
 end

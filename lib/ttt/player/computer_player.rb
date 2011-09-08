@@ -71,21 +71,12 @@ class ComputerPlayer < Player
   def play_two_in_a_row(board, mark, opponent_mark=nil)
     target_mark = opponent_mark.nil? ? mark : opponent_mark
     
-    board.rows.each_with_index do |row, y|
-      if row.select { |cell| cell == target_mark }.size == 2
-        row.each_with_index do |cell, x|
-          return board.move(mark, [x, y]) if board[x, y].nil?
-        end
-      end
-    end
+    choice = board.mark_if_two_in_a_row(:rows, board, mark, target_mark)
+    return choice if choice
     
-    board.columns.each_with_index do |column, x|
-      if column.select { |cell| cell == target_mark }.size == 2
-        column.each_with_index do |cell, y|
-          return board.move(mark, [x, y]) if board[x, y].nil?
-        end
-      end
-    end
+    choice = board.mark_if_two_in_a_row(:columns, board, mark, target_mark)
+    return choice if choice
+    
     board.diagonals.each do |diagonal|
       values_for_mark = diagonal.select { |coord| board[coord.first, coord.last] == target_mark }
       if values_for_mark.size == 2
