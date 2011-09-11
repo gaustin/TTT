@@ -63,11 +63,7 @@ class Board
   end
   
   def valid_move?(position)
-    if self[position.first, position.last].nil?
-      true
-    else
-      false
-    end
+    self[position.first, position.last].nil?
   end
   
   def full?
