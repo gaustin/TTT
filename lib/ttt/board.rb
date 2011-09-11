@@ -85,8 +85,8 @@ class Board
   def move(mark, position)
     if valid_move?(position)
       self[position.first, position.last] = mark
-      position
     end
+    position
   end
   
   def to_s

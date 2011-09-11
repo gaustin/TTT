@@ -14,7 +14,7 @@ class ComputerPlayer < Player
     return choice if choice
     
     # Center
-    return board.move(@mark, [1, 1]) if board.unmarked_spaces.include?([1, 1])
+    return 1, 1 if board.valid_move?([1, 1])
 
     # Opponent in opposing corner? Play opposite corner.
     choice = play_opposing_corner(board, opponent.mark)
@@ -43,15 +43,14 @@ class ComputerPlayer < Player
     unmarked_spaces = board.unmarked_spaces
     opposing_corners.each do |cell|
       opposite_corner = Board::OPPOSITE_CORNERS[cell]
-      return board.move(@mark, opposite_corner) if unmarked_spaces.include?(opposite_corner)
+      return opposite_corner if board.valid_move?(opposite_corner)
     end
     nil
   end
   
   def play_middle_side(board)
     Board::MID_SIDES.each do |cell|
-      if board.unmarked_spaces.include?(cell)
-        board.move(@mark, cell)
+      if board.valid_move?(cell)
         return cell
       end
     end
@@ -60,8 +59,7 @@ class ComputerPlayer < Player
   
   def play_empty_corner(board)
     Board::CORNERS.each do |corner|
-      if board.unmarked_spaces.include?(corner)
-        board.move(@mark, corner)
+      if board.valid_move?(corner)
         return corner
       end
     end
@@ -74,7 +72,7 @@ class ComputerPlayer < Player
     board.rows.each_with_index do |row, y|
       if row.select { |cell| cell == target_mark }.size == 2
         row.each_with_index do |cell, x|
-          return board.move(mark, [x, y]) if board[x, y].nil?
+          return x, y if board.valid_move?([x, y])
         end
       end
     end
@@ -82,7 +80,7 @@ class ComputerPlayer < Player
     board.columns.each_with_index do |column, x|
       if column.select { |cell| cell == target_mark }.size == 2
         column.each_with_index do |cell, y|
-          return board.move(mark, [x, y]) if board[x, y].nil?
+          return x, y if board.valid_move?([x, y])
         end
       end
     end
@@ -91,7 +89,7 @@ class ComputerPlayer < Player
       values_for_mark = diagonal.select { |coord| board[coord.first, coord.last] == target_mark }
       if values_for_mark.size == 2
         moves = diagonal - values_for_mark
-        return board.move(mark, moves.first) if moves.size == 1
+        return moves.first if moves.size == 1 && board.valid_move?(moves.first)
       end
 	  end
     nil
