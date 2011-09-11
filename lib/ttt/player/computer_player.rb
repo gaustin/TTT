@@ -4,29 +4,24 @@ class ComputerPlayer < Player
   def play(board, opponent)
     # FTW
     choice = play_two_in_a_row(board, @mark)
-    return choice if choice 
     
     # Prevent the win
-    choice = play_two_in_a_row(board, @mark, opponent.mark)
-    return choice if choice
+    choice ||= play_two_in_a_row(board, @mark, opponent.mark)
     
-    choice = block_or_create_fork(board, @mark, opponent.mark)
-    return choice if choice
+    choice ||= block_or_create_fork(board, @mark, opponent.mark)
     
     # Center
-    return 1, 1 if board.valid_move?([1, 1])
+    choice ||= [1, 1] if board.valid_move?([1, 1])
 
     # Opponent in opposing corner? Play opposite corner.
-    choice = play_opposing_corner(board, opponent.mark)
-    return choice if choice
+    choice ||= play_opposing_corner(board, opponent.mark)
     
     # Empty corner? Play it.
-    choice = play_empty_corner(board)
-    return choice if choice
+    choice ||= play_empty_corner(board)
     
     # Empty middle square on a side? Play it.
-    choice = play_middle_side(board)
-    return choice if choice
+    choice ||= play_middle_side(board)
+    choice
   end
   
   def play_opposing_corner(board, opposing_mark)
@@ -69,30 +64,20 @@ class ComputerPlayer < Player
   def play_two_in_a_row(board, mark, opponent_mark=nil)
     target_mark = opponent_mark.nil? ? mark : opponent_mark
     
-    board.rows.each_with_index do |row, y|
-      if row.select { |cell| cell == target_mark }.size == 2
-        row.each_with_index do |cell, x|
-          return x, y if board.valid_move?([x, y])
-        end
-      end
-    end
-    
-    board.columns.each_with_index do |column, x|
-      if column.select { |cell| cell == target_mark }.size == 2
-        column.each_with_index do |cell, y|
-          return x, y if board.valid_move?([x, y])
-        end
-      end
-    end
+    choice = board.mark_if_two_in_a_row(:rows, target_mark)
+    return choice unless choice.nil?
+
+    choice ||= board.mark_if_two_in_a_row(:columns, target_mark)
+    return choice unless choice.nil?
     
     board.diagonals.each do |diagonal|
       values_for_mark = diagonal.select { |coord| board[coord.first, coord.last] == target_mark }
       if values_for_mark.size == 2
         moves = diagonal - values_for_mark
-        return moves.first if moves.size == 1 && board.valid_move?(moves.first)
+        choice ||= moves.first if moves.size == 1 && board.valid_move?(moves.first)
       end
 	  end
-    nil
+    choice
   end
   
   def block_or_create_fork(board, mark, opponent_mark=nil)
