@@ -66,7 +66,7 @@ class ComputerPlayer < Player
     
     choice = board.mark_if_two_in_a_row(:rows, target_mark)
     choice ||= board.mark_if_two_in_a_row(:columns, target_mark)
-    
+
     board.diagonals.each do |diagonal|
       values_for_mark = diagonal.select { |coord| board[coord.first, coord.last] == target_mark }
       if values_for_mark.size == 2
